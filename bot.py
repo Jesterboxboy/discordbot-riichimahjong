@@ -13,6 +13,7 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 
 #load env variables from .env file
 load_dotenv()
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents:  Intents = Intents.default()
 intents.message_content = True
@@ -43,5 +44,5 @@ async def on_ready():
             print("Failed to load cog {}\n{}".format(cog, exc))
 
 
-bot.run(config.bot.DISCORD_TOKEN,log_handler=handler,log_level=logging.DEBUG, reconnect=True)
+bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.DEBUG, reconnect=True)
 
