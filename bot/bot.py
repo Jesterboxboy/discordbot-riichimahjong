@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python# This example requires the 'message_content' intent.
 import os
 import discord
 from discord import Intents
@@ -42,5 +42,5 @@ async def on_ready():
             print("Failed to load cog {}\n{}".format(cog, exc))
 
 
-bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.DEBUG, reconnect=True)
+bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.ERROR, reconnect=True)
 
