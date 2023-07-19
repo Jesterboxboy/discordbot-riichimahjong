@@ -1,6 +1,10 @@
 from discord.ext import commands
 import uuid
-from utils import api
+import json
+import requests
+import sys
+#path relative to bot.py where the cog is loaded
+import config.tournament as config
 
 class Tournament(commands.Cog):
     def __init__(self, bot):
@@ -8,47 +12,46 @@ class Tournament(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_load(self):
         print(f'{self.bot.user.name} has connected to Discord!')
 
-
     @commands.command(name='ranking', help='Print ranking of active tournament')
-    #@commands.has_role('nonexisting')
     async def ranking(self,ctx):
-        mimir_url = str(ctx.mimir_url)+"eid"+str(ctx.tourney)
-        json_body ={ "jsonrpc": "2.0", "method": "getRatingTable", "params": { "eventIdList": [str(mimir_url)], "orderBy": "rating", "order": "desc", "withPrefinished": "false" }, "id": str(uuid.uuid4()) }
+        request_url = str(config.MIMIR_URL)+'/v2/common.Mimir/GetRatingTable'
+        json_body = json.dumps({"eventIdList": [int(config.TOURNEY)], "orderBy": "rating", "order": "desc" })
+        headers = {'content-type': 'application/json'}
         print(json_body)
-        response = api.poll_mimir(mimir_url, json_body)
-        if response[0] == 200:
+        response = requests.post(url=request_url, data=json_body, headers=headers)
+
+        if response.status_code == 200:
            message_content = '```'
-           for rank in response[1]['result']:
-             message_content += str(rank['display_name'])
+           for rank in response.json()['list']:
+             message_content += str(rank['title'])
              message_content += '\n'
              message_content += str(rank['rating'])
              message_content += '\n'
-           message_content += '```' 
+           message_content += '```'
            emoji = '\N{THUMBS UP SIGN}'
            await ctx.message.add_reaction(emoji)
         await ctx.send(message_content)
 
-
-    @commands.command(name='addgame', help='Adds an online game by tenhou url to the active tournament')
-    #@commands.has_role('nonexisting')
+    @commands.command(name='addgame', help='Give a link to a tenhou game to add it to the active tournament. I.e. !addgame https://tenhou.net/0/?log=2023071323gm-0029-0000-487edd97', brief='Add tenhou game to online tournament')
     async def addgame(self,ctx, game_url):
-        mimir_url = str(ctx.mimir_url)+"eid"+str(ctx.tourney)
-        json_body = { "jsonrpc": "2.0", "method": "addOnlineReplay", "params": { "eventId": int(ctx.tourney), "link": game_url }, "id": str(uuid.uuid4()) }
+        request_url = str(config.MIMIR_URL)+'/v2/common.Mimir/AddOnlineReplay'
+        json_body = json.dumps({ "eventId": int(config.TOURNEY), "link": game_url })
+        headers = {'content-type': 'application/json'}
         print(json_body)
-        response = api.poll_mimir(mimir_url, json_body)
-        if response[0] == 200 and "error" not in response[1]:
+        response = requests.post(url=request_url, data=json_body, headers=headers)
+        if response.status_code == 200 and "error" not in response.json()['msg']:
            emoji = '\N{THUMBS UP SIGN}'
-           print(response[1])
+           print(response.json())
            await ctx.message.add_reaction(emoji)
-        else: 
+        else:
            emoji = '\N{CROSS MARK}'
 
-           print(response[1])
+           print(response.json())
            await ctx.message.add_reaction(emoji)
-           await ctx.send(response[1]['error']['message'])
+           await ctx.send('```'+response.json()['meta']['cause']+'```')
 
-def setup(bot):
-    bot.add_cog(Tournament(bot))
+async def setup(bot):
+    await bot.add_cog(Tournament(bot))

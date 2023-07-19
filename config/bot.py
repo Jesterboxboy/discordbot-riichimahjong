@@ -1,0 +1,3 @@
+DISCORD_TOKEN='NzU3NzAwMTY3MTY3Mzc3NDE4.GU2kMC.aXLSGwof-CaD4UkGbrgkH2nqyq3hsViNMJ4sb4'
+BOT_STATUS="ryanpinpon all day long"
+PREFIX='!'

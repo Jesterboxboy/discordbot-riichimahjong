@@ -22,7 +22,7 @@ class Jansou(commands.Cog):
         """
 
 
-        gi.player = ctx.author
+        gi.Player = ctx.author
         chan = ctx.channel
 
         if log == None or rate == None:
@@ -63,7 +63,7 @@ class Jansou(commands.Cog):
             if not "-" in shugi:
                 shugi = "+"+shugi
             if not "-" in payout:
-                payout = "+"+payout       
+                payout = "+"+payout
             table.append([str(score),str(shugi),str(payout),str(p.name)])
 
         colMax = [max([len(i) for i in c]) for c in zip(*table)]
@@ -85,5 +85,5 @@ class Jansou(commands.Cog):
 
         await chan.send(ret)
 
-def setup(bot):
-    bot.add_cog(Jansou(bot))
+async def setup(bot):
+    await bot.add_cog(Jansou(bot))
