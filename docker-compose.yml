@@ -1,0 +1,9 @@
+services:
+  discord-bot:
+    build: .
+    image: discord-bot
+    volumes:
+      - ./bot:/app
+    environment:
+      DISCORD-TOKEN: ${DISCORD-TOKEN}
+    env_file: .env

@@ -1,10 +1,9 @@
-# This example requires the 'message_content' intent.
+#!/usr/bin/python
 import os
 import discord
 from discord import Intents
 from discord.ext import commands
 import logging
-from dotenv import load_dotenv
 import config.bot
 
 
@@ -12,7 +11,6 @@ import config.bot
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
 #load env variables from .env file
-load_dotenv()
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents:  Intents = Intents.default()
