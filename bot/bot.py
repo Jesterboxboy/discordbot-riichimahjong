@@ -6,7 +6,6 @@ from discord.ext import commands
 import logging
 import config.bot
 
-
 #logging
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
@@ -15,6 +14,8 @@ DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents:  Intents = Intents.default()
 intents.message_content = True
+intents.members = True
+
 cogs: list = ["cogs.tournament","cogs.jansou", "cogs.ReactionRoles"]
 #cogs: list = ["cogs.tournament","cogs.jansou"]
 
@@ -41,6 +42,10 @@ async def on_ready():
             exc = "{}: {}".format(type(e).__name__, e)
             print("Failed to load cog {}\n{}".format(cog, exc))
 
+@bot.event
+async def on_member_join(member):
+    message = config.bot.GREETING or "This Message is a placeholder"
+    await member.send(message)
 
-bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.ERROR, reconnect=True)
+bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.DEBUG, reconnect=True)
 
