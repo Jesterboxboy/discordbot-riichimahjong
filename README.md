@@ -19,3 +19,9 @@ Configuration can be found under config/tournament.py
 ### Jansou
 
 This is a cog that helps in settling the score when gambling on tenhou jansou games.
+
+## Setup
+
+* Add the discord token for the bot to .env file
+* Change the settings under config/*.py for relevant cogs
+* start the bot with docker compose up --build -d

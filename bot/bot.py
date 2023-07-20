@@ -47,5 +47,5 @@ async def on_member_join(member):
     message = config.bot.GREETING or "This Message is a placeholder"
     await member.send(message)
 
-bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.DEBUG, reconnect=True)
+bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.ERROR, reconnect=True)
 
