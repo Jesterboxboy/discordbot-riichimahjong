@@ -9,4 +9,4 @@ Viel Spaß!
 
 MIMIR_URL="https://mimir.riichimahjong.at"
 FREY_URL="https://frey.riichimahjong.at"
-TOURNEY=16
+TOURNEY=34

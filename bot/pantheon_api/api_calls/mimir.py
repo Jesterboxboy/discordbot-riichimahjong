@@ -25,7 +25,7 @@ def add_game(game_link, tourney_nr):
         response = client.AddOnlineReplay(
             ctx=Context(),
             server_path_prefix="/v2",
-            request=mimir_pb2.GamesAddOnlineReplayPayload(tourney_nr, game_link),
+            request=mimir_pb2.GamesAddOnlineReplayPayload(event_id=tourney_nr, link=game_link),
         )
         return(response)
     except TwirpServerException as e:
