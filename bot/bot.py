@@ -1,10 +1,10 @@
-#!/usr/bin/python# This example requires the 'message_content' intent.
+# # This example requires the 'message_content' intent.
 import os
 import discord
 from discord import Intents
 from discord.ext import commands
 import logging
-import config.bot
+import config.settings as config
 
 #logging
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
@@ -26,13 +26,13 @@ class RiichiBot(commands.Bot):
         self.cogslist = cogslist
 
 
-bot = RiichiBot(command_prefix=config.bot.PREFIX,intents=intents, cogslist=cogs)
+bot = RiichiBot(command_prefix=config.PREFIX,intents=intents, cogslist=cogs)
 
 
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game(config.bot.BOT_STATUS))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game(config.BOT_STATUS))
     for cog in cogs:
         try:
             print(f"Loading cog {cog}")
