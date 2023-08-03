@@ -18,8 +18,8 @@ class Tournament(commands.Cog):
         print(f'{self.bot.user.name} has connected to Discord!')
 
     @commands.command(name='ranking', help='Print ranking of active tournament')
-    async def ranking(self,ctx):
-        response = mimir.get_ranking(config.TOURNEY)
+    async def ranking(self,ctx,tourney_nr=config.TOURNEY):
+        response = mimir.get_ranking(tourney_nr)
         if response:
            message_content = '```'
            for player in response.list:
