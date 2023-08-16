@@ -35,12 +35,12 @@ class Tournament(commands.Cog):
     @commands.command(name='addgame', help='Give a link to a tenhou game to add it to the active tournament. I.e. !addgame https://tenhou.net/0/?log=2023071323gm-0029-0000-487edd97', brief='Add tenhou game to online tournament')
     async def addgame(self,ctx, game_url,tourney_nr=config.TOURNEY):
         response = mimir.add_game(game_url,tourney_nr)
-        if (response,TwirpServerException):
+        if (isinstance(response,TwirpServerException)):
            emoji = '\N{CROSS MARK}'
            await ctx.message.add_reaction(emoji)
+           print(response)
         else:
            emoji = '\N{THUMBS UP SIGN}'
-           print(response)
            await ctx.message.add_reaction(emoji)
 
 async def setup(bot):

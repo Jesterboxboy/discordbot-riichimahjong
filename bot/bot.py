@@ -1,4 +1,3 @@
-# # This example requires the 'message_content' intent.
 import os
 import discord
 from discord import Intents
