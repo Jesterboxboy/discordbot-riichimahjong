@@ -7,6 +7,8 @@ Da kannst du dich dann auch per Emoji bei den jeweiligen Klub und Länderkanäle
 Viel Spaß!
 '''
 
-MIMIR_URL="https://mimir.riichimahjong.at"
-FREY_URL="https://frey.riichimahjong.at"
+MIMIR_URL="https://mimirurl.com"
+FREY_URL="https://freyurl.com"
 TOURNEY=34
+LOGIN_EMAIL="admin@pantheon.com"
+LOGIN_PASSWD="Password"

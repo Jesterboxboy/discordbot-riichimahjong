@@ -2,6 +2,7 @@ venv/
 .env
 .vscode/
 discord.log
+bot/config/settings.py
 *.code-workspace
 
 # Byte-compiled / optimized / DLL files

@@ -15,8 +15,9 @@ intents:  Intents = Intents.default()
 intents.message_content = True
 intents.members = True
 
-cogs: list = ["cogs.tournament","cogs.jansou", "cogs.ReactionRoles"]
-#cogs: list = ["cogs.tournament","cogs.jansou"]
+#cogs: list = ["cogs.tournament","cogs.jansou", "cogs.ReactionRoles"]
+#cogs: list = ["cogs.tournament","cogs.jansou", "cogs.ReactionRoles"]
+cogs: list = ["cogs.tournament"]
 
 class RiichiBot(commands.Bot):
 
@@ -41,10 +42,10 @@ async def on_ready():
             exc = "{}: {}".format(type(e).__name__, e)
             print("Failed to load cog {}\n{}".format(cog, exc))
 
-@bot.event
-async def on_member_join(member):
-    message = config.bot.GREETING or "This Message is a placeholder"
-    await member.send(message)
+#@bot.event
+#async def on_member_join(member):
+#    message = config.bot.GREETING or "This Message is a placeholder"
+#    await member.send(message)
 
 bot.run(DISCORD_TOKEN,log_handler=handler,log_level=logging.ERROR, reconnect=True)
 

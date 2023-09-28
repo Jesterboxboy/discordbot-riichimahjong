@@ -31,4 +31,21 @@ def add_game(game_link, tourney_nr):
     except TwirpServerException as e:
         return(e)
 
+def add_player(user_id, tourney_nr,auth_token):
+    client = mimir_twirp.MimirClient(config.MIMIR_URL)
+
+
+    try:
+        ctx=Context()
+        ctx.set_header("X-Auth-Token",auth_token.auth_token)
+        ctx.set_header("X-Current-Person-Id",str(auth_token.person_id))
+        response = client.RegisterPlayer(
+            ctx=ctx,
+            server_path_prefix="/v2",
+            request=mimir_pb2.EventsRegisterPlayerPayload(event_id=tourney_nr, player_id=user_id),
+        )
+        return(response)
+    except TwirpServerException as e:
+        return(e)
+
 

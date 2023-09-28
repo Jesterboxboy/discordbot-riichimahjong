@@ -24,4 +24,5 @@ This is a cog that helps in settling the score when gambling on tenhou jansou ga
 
 * Add the discord token for the bot to .env file
 * Change the settings under config/*.py for relevant cogs
+* Copy bot/config/example.settings.py to bot/config/settings.py and adapt the settings
 * start the bot with docker compose up --build -d
