@@ -1,4 +1,5 @@
 from discord.ext import commands
+from discord.utils import get
 import uuid
 import json
 import requests
@@ -47,14 +48,18 @@ class Tournament(commands.Cog):
         else:
             await ctx.message.add_reaction(self.checkmark)
 
-    @commands.command(name='register_player', help='Add a signed up player to a pantheon tournament. I.e.: !register_player [player_id] [tournament_id]. You can get your player id from your profile page. The tournament number defaults to the correct one, so you can omit it.', brief='Add a player to a pantheon tournament')
-    async def register_player(self, ctx, player_id, tourney_nr=config.TOURNEY):
+    @commands.command(pass_context=True, name='register_player', help='Add a signed up player to a pantheon tournament. I.e.: !register_player [player_id] [tournament_id]. You can get your player id from your profile page. The tournament number defaults to the correct one, so you can omit it.', brief='Add a player to a pantheon tournament')
+    # @commands.has_role('everyone')
+    async def register_player(self, ctx, player_id, tourney_nr=config.TOURNEY, liga_role=config.LIGA_ROLE):
         response = mimir.add_player(
             int(player_id), int(tourney_nr), self.auth_token)
         if (isinstance(response, TwirpServerException)):
             await ctx.message.add_reaction(self.crossmark)
             await ctx.message.reply(response.meta["cause"])
         else:
+            if liga_role:
+                role = get(ctx.message.guild.roles, name=liga_role)
+                await ctx.author.add_roles(role)
             await ctx.message.add_reaction(self.checkmark)
 
 
