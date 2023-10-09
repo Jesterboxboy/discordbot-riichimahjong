@@ -15,6 +15,9 @@ class Tournament(commands.Cog):
         self.bot = bot
         self.auth_token = frey.login_through_pantheon(
             config.LOGIN_EMAIL, config.LOGIN_PASSWD)
+        self.thumbsup = '\N{THUMBS UP SIGN}'
+        self.checkmark = '\N{white heavy check mark}'
+        self.crossmark = '\N{CROSS MARK}'
 
     @commands.Cog.listener()
     async def on_load(self):
@@ -31,8 +34,7 @@ class Tournament(commands.Cog):
                 message_content += str(int(player.rating))
                 message_content += '\n'
             message_content += '```'
-            emoji = '\N{THUMBS UP SIGN}'
-            await ctx.message.add_reaction(emoji)
+            await ctx.message.add_reaction(self.checkmark)
         await ctx.send(message_content)
 
     @commands.command(name='add_game', help='Give a link to a tenhou game to add it to the active tournament. I.e. !addgame https://tenhou.net/0/?log=2023071323gm-0029-0000-487edd97', brief='Add tenhou game to online tournament')
@@ -43,20 +45,17 @@ class Tournament(commands.Cog):
             await ctx.message.add_reaction(emoji)
             await ctx.message.reply(response.meta["cause"])
         else:
-            emoji = '\N{THUMBS UP SIGN}'
-            await ctx.message.add_reaction(emoji)
+            await ctx.message.add_reaction(self.checkmark)
 
     @commands.command(name='register_player', help='Add a signed up player to a pantheon tournament. I.e.: !register_player [player_id] [tournament_id]. You can get your player id from your profile page. The tournament number defaults to the correct one, so you can omit it.', brief='Add a player to a pantheon tournament')
     async def register_player(self, ctx, player_id, tourney_nr=config.TOURNEY):
         response = mimir.add_player(
             int(player_id), int(tourney_nr), self.auth_token)
         if (isinstance(response, TwirpServerException)):
-            emoji = '\N{CROSS MARK}'
-            await ctx.message.add_reaction(emoji)
+            await ctx.message.add_reaction(self.crossmark)
             await ctx.message.reply(response.meta["cause"])
         else:
-            emoji = '\N{THUMBS UP SIGN}'
-            await ctx.message.add_reaction(emoji)
+            await ctx.message.add_reaction(self.checkmark)
 
 
 async def setup(bot):
