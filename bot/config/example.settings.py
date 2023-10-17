@@ -13,3 +13,4 @@ TOURNEY = 34
 LIGA_ROLE = "DACHLiga"
 LOGIN_EMAIL = "admin@pantheon.com"
 LOGIN_PASSWD = "Password"
+RATING_TYPE = "series"

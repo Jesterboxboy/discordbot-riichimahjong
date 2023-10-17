@@ -8,6 +8,7 @@ import sys
 import config.settings as config
 import pantheon_api.api_calls.mimir as mimir
 import pantheon_api.api_calls.user as frey
+from pantheon_api import mimir_pb2
 from twirp.exceptions import TwirpServerException
 
 
@@ -25,18 +26,32 @@ class Tournament(commands.Cog):
         print(f'{self.bot.user.name} has connected to Discord!')
 
     @commands.command(name='ranking', help='Print ranking of active tournament')
-    async def ranking(self, ctx, tourney_nr=config.TOURNEY):
-        response = mimir.get_ranking(tourney_nr)
-        if response:
+    async def ranking(self, ctx, tourney_nr=config.TOURNEY, rating_type=config.RATING_TYPE):
+        response = mimir.get_ranking(tourney_nr, rating_type)
+        if type(response) == mimir_pb2.EventsGetGamesSeriesResponse:
             message_content = '```'
-            for player in response.list:
-                message_content += player.title
-                message_content += '\n'
-                message_content += str(int(player.rating))
-                message_content += '\n'
-            message_content += '```'
+            if rating_type == "series":
+                for entry in response.results:
+                    message_content += entry.player.title
+                    message_content += '\n'
+                    message_content += str(int(entry.best_series_scores))
+                    message_content += '\n'
+                message_content += '```'
+
+            else:
+                for player in response.list:
+                    message_content += player.title
+                    message_content += '\n'
+                    message_content += str(int(player.rating))
+                    message_content += '\n'
+                message_content += '```'
+
             await ctx.message.add_reaction(self.checkmark)
-        await ctx.send(message_content)
+            await ctx.send(message_content)
+
+        elif (isinstance(response, TwirpServerException)):
+            await ctx.message.add_reaction(self.crossmark)
+            await ctx.message.reply(response.meta["cause"])
 
     @commands.command(name='add_game', help='Give a link to a tenhou game to add it to the active tournament. I.e. !addgame https://tenhou.net/0/?log=2023071323gm-0029-0000-487edd97', brief='Add tenhou game to online tournament')
     async def add_game(self, ctx, game_url, tourney_nr=config.TOURNEY):
@@ -57,10 +72,10 @@ class Tournament(commands.Cog):
             await ctx.message.add_reaction(self.crossmark)
             await ctx.message.reply(response.meta["cause"])
         else:
+            await ctx.message.add_reaction(self.checkmark)
             if liga_role:
                 role = get(ctx.message.guild.roles, name=liga_role)
                 await ctx.author.add_roles(role)
-            await ctx.message.add_reaction(self.checkmark)
 
 
 async def setup(bot):
