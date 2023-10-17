@@ -72,10 +72,10 @@ class Tournament(commands.Cog):
             await ctx.message.add_reaction(self.crossmark)
             await ctx.message.reply(response.meta["cause"])
         else:
-            await ctx.message.add_reaction(self.checkmark)
             if liga_role:
                 role = get(ctx.message.guild.roles, name=liga_role)
                 await ctx.author.add_roles(role)
+            await ctx.message.add_reaction(self.checkmark)
 
 
 async def setup(bot):
