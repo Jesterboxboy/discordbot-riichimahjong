@@ -30,6 +30,7 @@ class Tournament(commands.Cog):
         response = mimir.get_ranking(tourney_nr, rating_type)
         if type(response) == mimir_pb2.EventsGetGamesSeriesResponse:
             message_content = '```'
+            message_content += '\n'
             for entry in response.results:
                 message_content += entry.player.tenhou_id
                 message_content += '\n'
