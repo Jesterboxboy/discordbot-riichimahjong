@@ -30,21 +30,15 @@ class Tournament(commands.Cog):
         response = mimir.get_ranking(tourney_nr, rating_type)
         if type(response) == mimir_pb2.EventsGetGamesSeriesResponse:
             message_content = '```'
-            if rating_type == "series":
-                for entry in response.results:
-                    message_content += entry.player.title
-                    message_content += '\n'
+            for entry in response.results:
+                message_content += entry.player.title
+                message_content += '\n'
+                if rating_type == "series":
                     message_content += str(int(entry.best_series_scores))
-                    message_content += '\n'
-                message_content += '```'
-
-            else:
-                for player in response.list:
-                    message_content += player.title
-                    message_content += '\n'
-                    message_content += str(int(player.rating))
-                    message_content += '\n'
-                message_content += '```'
+                else:
+                    message_content += str(int(entry.best_series_scores))
+                message_content += '\n'
+            message_content += '```'
 
             await ctx.message.add_reaction(self.checkmark)
             await ctx.send(message_content)
