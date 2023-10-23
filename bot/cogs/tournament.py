@@ -31,7 +31,7 @@ class Tournament(commands.Cog):
         if type(response) == mimir_pb2.EventsGetGamesSeriesResponse:
             message_content = '```'
             for entry in response.results:
-                message_content += entry.player.title
+                message_content += entry.player.tenhou_id
                 message_content += '\n'
                 if rating_type == "series":
                     message_content += str(int(entry.best_series_scores))
